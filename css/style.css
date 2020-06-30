@@ -379,7 +379,18 @@ textarea:focus {
   vertical-align: middle;
 }
 
+.popup__picture {
+  width: 100px;
+  height: 100px;
+}
+
+.popup__pictures li + li:nth-child(2){
+  margin-left: 5px;
+}
+
 .popup__avatar {
+  border: 3px solid #fff;
+  border-radius: 10%;
   position: absolute;
   bottom: 100%;
   margin-bottom: 10px;
