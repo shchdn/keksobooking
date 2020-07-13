@@ -227,8 +227,15 @@ textarea:focus {
   border-bottom: 0;
 }
 
-.map__pin:active {
+.map__pin:active, .map__pin:focus{
   outline: none;
+}
+
+.map__pin:focus img{
+  outline: none;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 10px rgba(255, 86, 53, 0.7);
+  
 }
 
 .map__pin:active img {

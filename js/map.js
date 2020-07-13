@@ -1,8 +1,11 @@
 var setupMap = document.querySelector('.map');
 var setupMapList = setupMap.querySelector('.map__pins');
+var setupMapMainPin = setupMap.querySelector('.map__pin--main');
 var mapElementsTemplate = document.querySelector('#map-pins-template');
 var mapCardTemplate = mapElementsTemplate.content.querySelector('.map__card');
 var mapPinTemplate = mapElementsTemplate.content.querySelector('.map__pin');
+var noticeSetup = document.querySelector('.notice');
+var noticeFieldsetsSetup = noticeSetup.querySelectorAll('fieldset');
 var MAP_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var usedTitles = [];
 var getTitle = function(titles){
@@ -238,41 +241,101 @@ var renderMapPins = function(){
     }
     setupMapList.appendChild(fragment);
 }
-var renderMapCard = function(){
+var searchPin = function(pinDetails){
+    for (flat in flats){
+        if (flats[flat].offer.title === pinDetails.alt){
+            console.log('found');
+            return flat;
+        }
+    }
+}
+var renderMapCard = function(pinDetails){
+    console.log(pinDetails.src);
+    console.log(searchPin(pinDetails));
+    let pinNumber = searchPin(pinDetails);
     let elementBefore = setupMap.querySelector('.map__filters-container');
-    let setupCard = setupMap.insertBefore(mapCardTemplate.cloneNode(true), elementBefore);
-    setupCard.querySelector('.popup__avatar').src = flats[0].author.avatar;
-    setupCard.querySelector('.popup__title').textContent = flats[0].offer.title;
-    setupCard.querySelector('.popup__text--address').textContent = flats[0].offer.address;
-    setupCard.querySelector('.popup__price').textContent = flats[0].offer.price + '₽/ночь';
-    setupCard.querySelector('.popup__type').textContent = apartmentTypeNames[flats[0].offer.type];
-    setupCard.querySelector('.popup__text--capacity').textContent = flats[0].offer.rooms + ' комнаты для ' + flats[0].offer.guests + ' гостей';
-    setupCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + flats[0].offer.checkin + ', выезд до ' + flats[0].offer.checkout;     
+    if (setupMap.querySelector('.map__card') === null){
+        var setupCard = setupMap.insertBefore(mapCardTemplate.cloneNode(true), elementBefore);
+    }
+    else{
+        var setupCard = setupMap.querySelector('.map__card');
+    }
+    setupCard.querySelector('.popup__avatar').src = flats[pinNumber].author.avatar;
+    setupCard.querySelector('.popup__title').textContent = flats[pinNumber].offer.title;
+    setupCard.querySelector('.popup__text--address').textContent = flats[pinNumber].offer.address;
+    setupCard.querySelector('.popup__price').textContent = flats[pinNumber].offer.price + '₽/ночь';
+    setupCard.querySelector('.popup__type').textContent = apartmentTypeNames[flats[pinNumber].offer.type];
+    setupCard.querySelector('.popup__text--capacity').textContent = flats[pinNumber].offer.rooms + ' комнаты для ' + flats[pinNumber].offer.guests + ' гостей';
+    setupCard.querySelector('.popup__text--time').textContent = 'Заезд после ' + flats[pinNumber].offer.checkin + ', выезд до ' + flats[pinNumber].offer.checkout;     
     let featuresList = setupCard.querySelector('.popup__features');
     while (featuresList.firstChild){
         featuresList.removeChild(featuresList.firstChild);
     }
-    for (feature in flats[0].offer.features){
-        let className = 'feature feature--' + flats[0].offer.features[feature];
+    for (feature in flats[pinNumber].offer.features){
+        let className = 'feature feature--' + flats[pinNumber].offer.features[feature];
         let featureItem = document.createElement('li');
         featureItem.classList = className;
         featuresList.appendChild(featureItem);
     }
-    setupCard.querySelector('.popup__description').textContent = flats[0].offer.description;
+    setupCard.querySelector('.popup__description').textContent = flats[pinNumber].offer.description;
     let picturesList = setupCard.querySelector('.popup__pictures')
     while (picturesList.firstChild){
         picturesList.removeChild(picturesList.firstChild);
     }
-    for (photo in flats[0].offer.photos){
+    for (photo in flats[pinNumber].offer.photos){
         let ulItem = document.createElement('li');
         let liItem = document.createElement('img');
         picturesList.appendChild(ulItem);
         ulItem.appendChild(liItem);
-        liItem.src = flats[0].offer.photos[photo];
+        liItem.src = flats[pinNumber].offer.photos[photo];
         liItem.classList = 'popup__picture';
     }
+    delete setupCard;
 }
-setupMap.classList.remove('map--faded');
+var activateMap = function(){
+    setupMapMainPin.addEventListener('mouseup', onSetupMapMainPinMouseUp);
+}
+var listenPinsEvents = function(pins) {
+    let i = 0;
+    pins.forEach(pin => {
+        pin.addEventListener('click', onPinsClick.bind(null, pin.querySelector('img')));
+        ++i;
+        console.log(pin);
+    });
+}
+var getMapCardElements = function(){
+    var setupMapCard = setupMap.querySelector('.map__card, .popup');
+    var mapCardPopupClose = setupMapCard.querySelector('.popup__close');
+}
+var onPinsClick = function(pinDetails, event){
+    renderMapCard(pinDetails);
+    var mapCardPopupClose = setupMap.querySelector('.popup__close');
+    mapCardPopupClose.addEventListener('click', onMapCardPopupCloseClick);
+}
+var onMapCardPopupCloseClick = function(setupMapCard) {
+    var setupMapCard = setupMap.querySelector('.map__card, .popup');
+    var mapCardPopupClose = setupMapCard.querySelector('.popup__close');
+    setupMapCard.remove();
+    mapCardPopupClose.removeEventListener('click', onMapCardPopupCloseClick);
+}
+var onSetupMapMainPinMouseUp = function(){
+    enableNoticeFieldsets();
+    renderMapPins();
+    var setupMapPins = setupMap.querySelectorAll('.map__pin:not(.map__pin--main)');
+    listenPinsEvents(setupMapPins);
+    setupMap.classList.remove('map--faded');
+    setupMapMainPin.removeEventListener('mouseup', onSetupMapMainPinMouseUp);    
+}
+var disableNoticeFieldsets = function(){
+    for (fieldset in noticeFieldsetsSetup){
+        noticeFieldsetsSetup[fieldset].disabled = 'disabled';
+    }
+}
+var enableNoticeFieldsets = function(){
+    for (fieldset in noticeFieldsetsSetup){
+        noticeFieldsetsSetup[fieldset].disabled = false;
+    }
+}
 getMapData();
-renderMapPins();
-renderMapCard();
+disableNoticeFieldsets();
+activateMap();
