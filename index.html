@@ -13,7 +13,7 @@
 </header>
 
 <main>
-  <section class="map map--faded">
+  <section class="map map--faded">  
     <div class="map__pins">
       <div class="map__pinsoverlay"><h2>И снова Токио!</h2></div>
 
@@ -102,12 +102,12 @@
 
       <fieldset class="form__element form__element--wide">
         <label for="title">Заголовок объявления</label>
-        <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио">
+        <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" required>
       </fieldset>
 
       <fieldset class="form__element form__element--wide">
         <label for="address">Адрес</label>
-        <input id="address" name="address" type="text">
+        <input id="address" name="address" type="text" required>
       </fieldset>
 
       <fieldset class="form__element">
@@ -174,8 +174,8 @@
         <input type="checkbox" name="features" value="washer" id="feature-washer">
         <label class="feature feature--washer" for="feature-washer">Стиральная машина</label>
 
-        <input type="checkbox" name="features" value="elevator" id="feature-washer">
-        <label class="feature feature--elevator" for="feature-washer">Лифт</label>
+        <input type="checkbox" name="features" value="elevator" id="feature-elevator">
+        <label class="feature feature--elevator" for="feature-elevator">Лифт</label>
 
         <input type="checkbox" name="features" value="conditioner" id="feature-conditioner">
         <label class="feature feature--conditioner" for="feature-conditioner">Кондиционер</label>
@@ -245,9 +245,19 @@
   <button style="left: 200px; top: 400px;" class="map__pin"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
 </template>
 
+<template id="map-error-template">
+  <div class="map__error">
+    <img src="img/error.png" alt="" class="error__image" width="35px">
+    <p class="error__description">Произошла ошибка</p>
+  </div>
+</template>
+
+<script src="./js/lib.js"></script>
 <script src="./js/data.js"></script>
+<script src="./js/backend.js"></script>
 <script src="./js/pin.js"></script>
 <script src="./js/card.js"></script>
+<script src="./js/validation.js"></script>
 <script src="./js/form.js"></script>
 <script src="./js/map.js"></script>
 

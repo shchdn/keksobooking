@@ -184,6 +184,21 @@ textarea:focus {
   border-radius: 0 0 10px 10px;
 }
 
+.map__error{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  top: 475px;
+  width: 300px;
+  left: calc(50% - 150px);
+  padding: 10px 0px;
+  background: #fff;
+  border-radius: 10px;
+  position: absolute;
+
+}
+
 .map__pins {
   width: 100%;
 
@@ -360,6 +375,12 @@ textarea:focus {
   font-size: 14px;
 }
 
+.error__description {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
 .popup ul {
   padding: 0;
   margin: 0;
@@ -391,7 +412,7 @@ textarea:focus {
   height: 100px;
 }
 
-.popup__pictures li + li:nth-child(2){
+.popup__pictures li:nth-child(2n){
   margin-left: 5px;
 }
 
@@ -535,6 +556,10 @@ textarea:focus {
   width: 50%;
 }
 
+.form__element--wide .validation-message {
+  width: calc(100% - 20px);
+}
+
 .form__element label {
   display: block;
   padding-bottom: 5px;
@@ -542,6 +567,40 @@ textarea:focus {
 
 .form__element input {
   width: calc(100% - 20px);
+}
+
+.form__element.success input:focus {
+  transition-duration: 0.2s;
+  border-color: green;
+  box-shadow: 0 0 4px 1px green;
+}
+
+.form__element.error input,
+.form__element.error select  {
+  transition-duration: 0.2s;
+  border-color: red;
+  box-shadow: 0 0 4px 1px red;
+}
+
+
+.form__element.error .validation-message:before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  width: 15px;
+  height: 15px;
+  background: url('../img/error.png') ;
+  background-size: cover;
+}
+
+.validation-message {
+  position: relative;
+  display: block;
+  padding: 10px 20px;
+  
+  width: 220px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .notice__form .feature {

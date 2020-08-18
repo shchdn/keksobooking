@@ -3,7 +3,9 @@
     var setupMap = document.querySelector('.map');
     var mapElementsTemplate = document.querySelector('#map-pins-template');
     var mapPinTemplate = mapElementsTemplate.content.querySelector('.map__pin');
+    var mapErrorTemplate = document.querySelector('#map-error-template').content.querySelector('.map__error');
     var setupMapList = setupMap.querySelector('.map__pins');
+
     var getPinSize = function(){
         let oldPinPosition = mapPinTemplate.style.cssText;
         mapPinTemplate.style.cssText = 'left: -1000px; top: -1000px;';
@@ -14,11 +16,13 @@
         mapPinTemplate.style.cssText = oldPinPosition;
         return (widthAndHeight);
     }
+    
     window.data = {
         setupMap: setupMap,
         setupMapList: setupMapList,
         mapElementsTemplate: mapElementsTemplate,
         mapPinTemplate: mapPinTemplate,
+        mapErrorTemplate: mapErrorTemplate,
         TAIL_HEIGHT: 18,
         PIN_SIZE: getPinSize(),
         flats: [],
@@ -224,7 +228,7 @@
                     'y': getLocationY()
                 }
             };
-            data.flats.push(flatParameters);
+            window.data.flats.push(flatParameters);
         }
     }
     getMapData();    
